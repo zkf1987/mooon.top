@@ -167,14 +167,14 @@ client的响应速度，这取决于client端tcp的read_buffer⼤⼩。如果要
 (ack)nginx发出的数据包,同时tcp滑动窗⼝已被打满。也就是说当往temp_file中写响应报⽂时，说明
 upstream的响应体已经⼤到缓存区⽆法承载，另外即使没有出现warn，缓存区也可能已多次被
 upstream填满。扩⼤缓冲区只是可以规避这个warn，但本质问题还是upstream单次响应过⼤，⽽且 ⼀味的调⼤buffers也存在⼀定的数据延迟，因为只有buffers满时，nginx才会往client发数据，类似与 线程池的阻塞队列⼤⼩。所以此参数⼀定要设置的合适，⽽不是过⼤或过⼩。
-```
+
 ### 结论
 当调⼤此参数时，warn⽇志没有了，响应时间也短了，因为不⾛⽂件IO了，直接⾛内存。
 
 ## 如何解决容器nginx的问题
 1. 根据容器中error.log的⽇志，an upstream response is buffered to a temporary file，可以确定 此错误是由于upstream响应体过⼤出现的问题，所以与proxy_buffer_size参数⽆关，建议此参数 保持默认值不变，也可以通过getconf PAGE_SIZE命令查看系统内存⻚⼤⼩，进⾏显⽰设置。 
 2. 在nginx的log_format中添加$upstream_response_length，获取upstream实际响应体⼤⼩，同 时调整proxy_buffers的值，建议第2个参数维持系统内存⻚⼤⼩，只调整number的个数，然后进 ⾏测试，达到不出现warn告警的最⼩值为合适值。
- 3. 调整proxy_busy_buffers_size的值，建议保持跟proxy_buffer_size的值⼀致，也就是⼀个内存⻚ ⼤⼩，因为此参数控制nginx单次响应client的⼤⼩。但根据tcp/ip协议栈，mtu跟mss的关系，tcp的最⼤报⽂⻓度也就是1460。⽆论单次nginx响应client的报⽂有多⼤，最终在传说时也会进⾏分 ⽚。另外上⾯已经提到过，数值太⼤时，如果upstream的响应报⽂过⼤，需要堆积够proxy_busy_buffers_size,nginx才会发送给client，必然会导致⼀定的延迟。此问题的根本问题还 是在upstream的响应体过⼤，所以最直接的解决办法还是业务⽅的接⼝响应的内容是啥，是否可以改造为多次请求，⽽不是⼀次返回这么多数据。
+ 1. 调整proxy_busy_buffers_size的值，建议保持跟proxy_buffer_size的值⼀致，也就是⼀个内存⻚ ⼤⼩，因为此参数控制nginx单次响应client的⼤⼩。但根据tcp/ip协议栈，mtu跟mss的关系，tcp的最⼤报⽂⻓度也就是1460。⽆论单次nginx响应client的报⽂有多⼤，最终在传说时也会进⾏分 ⽚。另外上⾯已经提到过，数值太⼤时，如果upstream的响应报⽂过⼤，需要堆积够proxy_busy_buffers_size,nginx才会发送给client，必然会导致⼀定的延迟。此问题的根本问题还 是在upstream的响应体过⼤，所以最直接的解决办法还是业务⽅的接⼝响应的内容是啥，是否可以改造为多次请求，⽽不是⼀次返回这么多数据。
 
  >MTU(Maximum Transmission Unit) - ⼀种通信协议的某⼀层上⾯所能通过的最⼤数据包⼤ ⼩.以太⽹为 1500，这也是为何路由器或 PC 上默认都是 1500，因此数据包⼀旦超过此⼤ ⼩，就会进⾏分包，这也就有了 IP 分⽚的过程。
 >MSS就是TCP数据包每次能够传输的最⼤数据分段。为了达到最佳的传输效能 TCP协议在建⽴连接的时候通常要协商双⽅的MSS值，这个值TCP协议在实现的 时候往往⽤MTU值代替（需要减去IP数据包包头的⼤⼩20Bytes和TCP数据段的 包头20Bytes）所以往往MSS为1460。通讯双⽅会根据双⽅提供的MSS值得最⼩ 值确定为这次连接的最⼤MSS值。
