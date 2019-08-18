@@ -131,6 +131,7 @@ proxy_busy_buffers_size⼤于等于proxy_buffer_size的值，同时也必须⼩�
  wireshark抓包如下，可以看到nginx每个包响应client的⼤⼩为2055，因为还要包含⼀些协议本⾝的报 ⽂，所以略⼤于2048
 
 ![3png.png](https://i.loli.net/2019/08/15/osUryE6SFQ1CDxu.png)
+<a href="https://sm.ms/image/kACSBtTh5VyPZua" target="_blank"><img src="https://i.loli.net/2019/08/15/kACSBtTh5VyPZua.png" ></a>
  调整proxy_busy_buffers_size=3K，upstream响应报⽂⼤⼩不变，nginx每个包响应⼤⼩为2055
 ![4.png](https://i.loli.net/2019/08/15/kACSBtTh5VyPZua.png)
  调整proxy_busy_buffers_size=4K，upstream响应报⽂⼤⼩不变，nginx每个包响应⼤⼩为4104
