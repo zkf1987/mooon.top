@@ -56,4 +56,58 @@ kubectl delete pod -n kube-system ingress-controller-itxtb-restapi-1-xxx
 
 > 注意:重创nginx.tmpl后需要打标签.
 
+## 修改密码
+```
+skip=14
+
+REAL_IP=`/sbin/ip a | /bin/grep -w inet | /bin/grep -w brd | grep 192.168|/bin/awk '{print $2}' | /bin/awk -F "/" '{print $1}'`
+
+REAL_PASSWD=`tail -n +$skip "$0" | grep -w ${REAL_IP} | awk '{print $2}'`
+
+#echo  "DEBUG:" $REAL_IP $REAL_PASSWD
+echo "$REAL_PASSWD" | passwd --stdin root
+
+
+exit 0
+
+#Please repleace "IP PASSWD" as follow:
+192.168.159.179	1q2w!Q@W
+192.168.159.177	1q2w!Q@W
+192.168.159.176	1q2w!Q@W
+192.168.159.180	1q2w!Q@W
+192.168.159.175	1q2w!Q@W
+192.168.159.181	1q2w!Q@W
+192.168.159.182	1q2w!Q@W
+192.168.159.183	1q2w!Q@W
+192.168.159.220	1q2w!Q@W
+192.168.159.219	1q2w!Q@W
+192.168.159.221	1q2w!Q@W
+192.168.159.223	1q2w!Q@W
+192.168.159.222	1q2w!Q@W
+192.168.159.224	1q2w!Q@W
+192.168.159.225	1q2w!Q@W
+192.168.159.226	1q2w!Q@W
+192.168.159.227	1q2w!Q@W
+192.168.159.228	1q2w!Q@W
+192.168.159.190	1q2w!Q@W
+192.168.159.189	1q2w!Q@W
+192.168.159.191	1q2w!Q@W
+192.168.159.192	1q2w!Q@W
+192.168.159.193	1q2w!Q@W
+192.168.159.194	1q2w!Q@W
+192.168.159.195	1q2w!Q@W
+192.168.159.196	1q2w!Q@W
+192.168.159.197	1q2w!Q@W
+192.168.159.198	1q2w!Q@W
+192.168.159.204	1q2w!Q@W
+192.168.159.205	1q2w!Q@W
+192.168.159.206	1q2w!Q@W
+192.168.159.207	1q2w!Q@W
+192.168.159.209	1q2w!Q@W
+192.168.159.208	1q2w!Q@W
+192.168.159.210	1q2w!Q@W
+192.168.159.211	1q2w!Q@W
+192.168.159.212	1q2w!Q@W
+192.168.159.213	1q2w!Q@W
+```
 
