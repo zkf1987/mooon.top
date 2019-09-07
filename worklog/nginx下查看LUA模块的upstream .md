@@ -2,7 +2,7 @@
 目前nginx版本已经升级到1.15 ，upstream模块交给lua来管理。
 
 ## 负载均衡对应的backends
->洛阳核心域
+>淮安核心域
 ```shell
 default          8181
 yth2-restapi-1   8182
@@ -21,6 +21,30 @@ wltx-web-1       8194
 yth-restapi-2    8195
 yth-web-2        8196
 yth2-web-1       8197
+```
+
+>洛阳核心域
+```shell
+nginx-ingress-controller 8181
+yth2-restapi-1 8182
+hlwzx-web-1 8183
+yth-web-1 8184
+itxtb-restapi-1 8185
+itxtb-web-1 8186
+yth-nginx-a 8187
+yth-nginx-hd 8188
+yth-nginx-hd-x 8189
+yth-restapi-1 8190
+hlwzx-restapi-1 8191
+internet 8192
+wltx-restapi-1 8193
+wltx-web-1 8194
+yth-restapi-2 8195
+yth-web-2 8196
+yth2-web-1 8197
+night-nginx-hd 8198
+n1 8199
+intelligentize 8200
 ```
 ## 查询某一个负载均衡下对应的upstream
 ```shell
